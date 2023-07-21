@@ -8,8 +8,8 @@ const uint64_t pipe = 0xE8E8F0F0E1LL;       //Pipe address
 
 struct package          //Make a struct to store x-y values together
 {
-    int X=1;
-    int Y=1;
+    int X=512;
+    int Y=512;
 };
 typedef struct package Package;
 Package pos;
@@ -39,7 +39,7 @@ void setup()
     radio.stopListening();                       //To set controller as transmitter
     */
 
-    pinMode(roller_weapon_switch, INPUT);        //Or INPUT_PULLUP if no resistors in controller PCB
+    pinMode(roller_weapon_switch, INPUT_PULLUP);
 
 }
 
@@ -66,7 +66,7 @@ void loop()
 
     //Send data to the reciever
     radio.write(&pos, sizeof(pos));   
-    radio.write(&roller_weapon_switch_state, sizeof(roller_switch_switch_state));
+    radio.write(&roller_weapon_switch_state, sizeof(roller_weapon_switch_state));
     radio.write(&hammer_weapon_input, sizeof(hammer_weapon_input));
     delay(200);
 
