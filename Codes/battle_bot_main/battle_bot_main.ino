@@ -43,6 +43,25 @@ void setup() {
 
   analogWrite(IN_Speed_Left, 255);
   analogWrite(IN_Speed_Right, 255);
+
+  pinMode(IN_Speed_Weapon_Front, OUTPUT);
+  pinMode(INA_Weapon_Front, OUTPUT);
+  pinMode(INB_Weapon_Front, OUTPUT);
+
+  pinMode(IN_Speed_Weapon_Back, OUTPUT);
+  pinMode(INA_Weapon_Back, OUTPUT);
+  pinMode(INB_Weapon_Back, OUTPUT);
+
+  ////////////////////
+  digitalWrite(INA_Weapon_Front, HIGH);   // Roller rolls at all times
+  digitalWrite(INB_Weapon_Front, LOW);
+  analogWrite(IN_Speed_Weapon_Front, 255);
+  ///////////////////
+
+  digitalWrite(INA_Weapon_Back, HIGH);
+  digitalWrite(INB_Weapon_Back, HIGH);
+
+  analogWrite(IN_Speed_Weapon_Back, 255);
   delay(500);
 
   
