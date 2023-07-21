@@ -20,7 +20,7 @@ int hammer_weapon_control_signal = 2;   //Servo Motor Control Signal Pin
 
 //DEFINE PINS FOR MOTION-MOTOR DRIVER HERE
 
-int roller_weapon_switch_state;
+int roller_weapon_switch_state=0;
 
 //DEFINE PINS FOR ROLLER WEAPON-MOTOR DRIVER HERE
 
@@ -59,6 +59,7 @@ void loop()
     if (radio.available()) 
     {
         radio.read(&pos, sizeof(pos));
+        radio.read(&roller_weapon_switch_state, sizeof(roller_switch_button_state));
         radio.read(&hammer_weapon_input, sizeof(hammer_weapon_input));
         Serial.print("X:");
         Serial.print(pos.X);
@@ -112,6 +113,7 @@ void loop()
     if (hammer_weapon_input == 1 )   
     {
         bring_hammer_down_and_return_up();   //DEFINE
+        delay(200);
     }
 
 
