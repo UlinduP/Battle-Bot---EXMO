@@ -6,13 +6,15 @@ RF24 radio(7, 8);       //CE=7, CSN=8. Can use any other digital pin as well.
 const uint64_t pipe = 0xE8E8F0F0E1LL;       //Pipe address
 
 
-struct package          //Make a struct to store x-y values together
+struct package          //Make a struct to store x-y values and weapon states together
 {
     int X=512;
     int Y=512;
+    int hammer_weapon_input;
+    int roller_weapon_switch_state;
 };
 typedef struct package Package;
-Package pos;
+Package dataToSend;
 
 
 const int x_axis_pin = A0;    //Joystick x_axis input
@@ -20,10 +22,9 @@ const int y_axis_pin = A1;    //Joystick y_axis input
 
 
 const int hammer_weapon_button = 3;       //Instantaneous Digital input from push button
-int hammer_weapon_input;
 
 const int roller_weapon_switch = 4;       //Continuous Digital input from toggle switch
-int roller_weapon_switch_state;
+
 
 
 
@@ -47,27 +48,25 @@ void setup()
 void loop() 
 {
 
-    pos.X = analogRead(x_axis_pin);     //Read Joystick X-axis
-    pos.Y = analogRead(y_axis_pin);     //Read Joystick Y-axis
+    dataToSend.X = analogRead(x_axis_pin);     //Read Joystick X-axis
+    dataToSend.Y = analogRead(y_axis_pin);     //Read Joystick Y-axis
 
-    roller_weapon_switch_state = digitalRead(roller_weapon_switch);        //Read state of roller_weapon_switch
+    dataToSend.roller_weapon_switch_state = digitalRead(roller_weapon_switch);        //Read state of roller_weapon_switch
 
-    hammer_weapon_input = digitalRead(hammer_weapon_button);        //Read input from hammer_weapon_button
+    dataToSend.hammer_weapon_input = digitalRead(hammer_weapon_button);        //Read input from hammer_weapon_button
 
-    //For Testing Purposes
+    // For Testing Purposes
     Serial.print("X:");
-    Serial.print(pos.X);
-    Serial.print("    Y");
-    Serial.print(pos.Y);
-    Serial.print("    Hammer Weapon Input");
-    Serial.print(hammer_weapon_input);
-    Serial.print("    Roller_weapon_switch_state");
-    Serial.println(roller_weapon_switch_state);
+    Serial.print(dataToSend.X);
+    Serial.print("  Y");
+    Serial.print(dataToSend.Y);
+    Serial.print("  Hammer Weapon Input");
+    Serial.print(dataToSend.hammer_weapon_input);
+    Serial.print("  Roller_weapon_switch_state");
+    Serial.println(dataToSend.roller_weapon_switch_state);
 
-    //Send data to the reciever
-    radio.write(&pos, sizeof(pos));   
-    radio.write(&roller_weapon_switch_state, sizeof(roller_weapon_switch_state));
-    radio.write(&hammer_weapon_input, sizeof(hammer_weapon_input));
+    // Send data to the receiver as a single packet
+    radio.write(&dataToSend, sizeof(dataToSend));
     delay(200);
 
 }
