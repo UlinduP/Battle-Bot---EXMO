@@ -6,21 +6,21 @@ RF24 radio(7, 8);     //CE=7, CSN=8. Can use any other digital pin as well.
 const uint64_t pipe = 0xE8E8F0F0E1LL;             //Pipe Address
 
 
-struct package        //Make a struct to store x-y values together
+struct package        //Make a struct to store x-y values and weapon states together
 {
-    int X=1;
-    int Y=1;
+    int X = 512;
+    int Y = 512;
+    int hammer_weapon_input = 0;
+    int roller_weapon_switch_state = 0;
 };
 typedef struct package Package;
-Package pos;
+Package dataReceived;
 
 
-int hammer_weapon_input;    
-int hammer_weapon_control_signal = somedigitalpinwithpwm;   //Servo Motor Control Signal Pin
+int hammer_weapon_control_signal = somedigitalpinwithpwm; // Servo Motor Control Signal Pin
 
 //DEFINE PINS FOR MOTION-MOTOR DRIVER HERE
 
-int roller_weapon_switch_state=0;
 
 //DEFINE PINS FOR ROLLER WEAPON-MOTOR DRIVER HERE
 
@@ -58,19 +58,20 @@ void loop()
     
     if (radio.available()) 
     {
-        radio.read(&pos, sizeof(pos));
-        radio.read(&roller_weapon_switch_state, sizeof(roller_weapon_switch_state));
-        radio.read(&hammer_weapon_input, sizeof(hammer_weapon_input));
+        radio.read(&dataReceived, sizeof(dataReceived));
+
         Serial.print("X:");
-        Serial.print(pos.X);
-        Serial.print("      Y");
-        Serial.print(pos.Y);
-        Serial.print("      hammer_weapon_input");
-        Serial.println(hammer_weapon_input);
+        Serial.print(dataReceived.X);
+        Serial.print("  Y");
+        Serial.print(dataReceived.Y);
+        Serial.print("  hammer_weapon_input");
+        Serial.print(dataReceived.hammer_weapon_input);
+        Serial.print("  Roller_weapon_switch_state");
+        Serial.println(dataReceived.roller_weapon_switch_state);
     }
 
-    int xAxis = pos.X;
-    int yAxis = pos.Y;
+    int xAxis = dataReceived.X;
+    int yAxis = dataReceived.Y;
 
     //For analog input, 600-1023: Forward, 0-400: Backward, 400-600: Do nothing
     int forward = map(yAxis, 600, 1023, 0, 255);  
@@ -130,6 +131,6 @@ void loop()
         roller_weapon_OFF();    //DEFINE   
     }
 
-
 }
+
 
