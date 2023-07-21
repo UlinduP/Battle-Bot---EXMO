@@ -15,14 +15,14 @@ typedef struct package Package;
 Package pos;
 
 
-int x_axis_pin = A0;    //Joystick x_axis input
-int y_axis_pin = A1;    //Joystick y_axis input
+const int x_axis_pin = A0;    //Joystick x_axis input
+const int y_axis_pin = A1;    //Joystick y_axis input
 
 
-int hammer_weapon_button = 3;       //Instantaneous Digital input from push button
+const int hammer_weapon_button = 3;       //Instantaneous Digital input from push button
 int hammer_weapon_input;
 
-int roller_weapon_switch = 4;       //Continuous Digital input from toggle switch
+const int roller_weapon_switch = 4;       //Continuous Digital input from toggle switch
 int roller_weapon_switch_state;
 
 
@@ -66,7 +66,7 @@ void loop()
 
     //Send data to the reciever
     radio.write(&pos, sizeof(pos));   
-    radio.write(&roller_weapon_switch_state, sizeof(roller_switch_button_state));
+    radio.write(&roller_weapon_switch_state, sizeof(roller_switch_switch_state));
     radio.write(&hammer_weapon_input, sizeof(hammer_weapon_input));
     delay(200);
 
